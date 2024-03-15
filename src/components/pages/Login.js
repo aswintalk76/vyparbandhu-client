@@ -146,7 +146,6 @@ const Login = () => {
         <>
             <section class="vh-100 container_body">
 
-
                 <div class="container py-5 h-100">
                     <div class="row px-3 d-flex align-items-center justify-content-center h-100">
                         <div class="col-md-10 col-lg-10 col-xl-9 card flex-row mx-auto px-0">

@@ -7,7 +7,6 @@ const uploadFile = async (fileName, file, callBack) => {
     const REGION = "Global";
 
     AWS.config.update({
-   
     });
     const s3 = new AWS.S3({
         params: { Bucket: S3_BUCKET },
