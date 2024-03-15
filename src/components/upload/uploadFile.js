@@ -7,8 +7,7 @@ const uploadFile = async (fileName, file, callBack) => {
     const REGION = "Global";
 
     AWS.config.update({
-        accessKeyId: 'AKIA2UC3FUJ5T5BNCSZM',
-        secretAccessKey: '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',
+   
     });
     const s3 = new AWS.S3({
         params: { Bucket: S3_BUCKET },
