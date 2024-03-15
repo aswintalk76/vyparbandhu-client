@@ -7,6 +7,7 @@ import ServicePage from './components/pages/ServicePage';
 import Login from './components/pages/Login';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Profile from './components/pages/Profile';
 
 
 // import AnnualFiling from './components/pages/AnnualFiling';
@@ -24,6 +25,7 @@ function App() {
           <Routes>
 
             <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/documents" element={<DocumentPage />} />
             <Route path="/servicePage" element={<ServicePage />} />
             <Route path="/login" element={<Login />} />

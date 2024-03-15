@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AboutUs from "./AboutUs";
 import ContactUs from "./ContactUs";
 import Footer from "./Footer";
@@ -24,6 +24,8 @@ const Home = () => {
     const [createPassword, setCreatePassword] = useState()
     const [createNumber, setCreateNumber] = useState()
     const [createConPassword, setCreateConPassword] = useState()
+    const [login, setLogin] = useState()
+    const [ loginStatus, setLoginStatus] = useState(false)
 
     const openModal = () => {
         setModalActive(true);
@@ -86,10 +88,15 @@ const Home = () => {
                     body: JSON.stringify({ email: email, password: password })
                 });
                 const data = await response.json();
+                console.log(data)
                 if (response.status === 200) {
                     console.log(data)
                     localStorage.setItem("email", data.email);
+                    localStorage.setItem("id", data._id);
+                    data.name && localStorage.setItem('number', data.number);
                     localStorage.setItem('name', data.name);
+                    setLoginStatus(true)
+                    // setLogin(data.email)
                     setCreateConPassword()
                     setEmail()
                     setPasswod()
@@ -99,7 +106,7 @@ const Home = () => {
                     toast.success("Login Account Sucesfully!")
                     setModalActive(false)
 
-                  
+
 
                 } else {
                     toast.error(data.error)
@@ -156,10 +163,14 @@ const Home = () => {
 
     }
 
+    useEffect(() => {
+        setLogin(localStorage.getItem('email'))
+    }, [loginStatus])
+
     return (
         <>
             <div className="App">
-              
+
 
                 {modalActive && (
                     <>
@@ -365,7 +376,7 @@ const Home = () => {
                     </>
                 )}
 
-                <Header setModalActive={setModalActive} setActiveData={setActiveData} />
+                <Header setModalActive={setModalActive} setActiveData={setActiveData} login={login} />
                 <Slider />
                 <Services />
                 <OurWorkflow />

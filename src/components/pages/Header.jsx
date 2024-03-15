@@ -4,7 +4,7 @@ import { IoCallOutline } from "react-icons/io5";
 
 import logo1 from '../images/logo3-removebg-preview.png'
 import { Link } from 'react-router-dom';
-const Header = ({ setModalActive, setActiveData }) => {
+const Header = ({ setModalActive, setActiveData, login }) => {
 
     const [active, setActive] = useState("Start Business");
     const [serviceList, setServiceList] = useState()
@@ -66,7 +66,8 @@ const Header = ({ setModalActive, setActiveData }) => {
 
 
 
-    console.log(serviceList, 'service')
+
+    console.log(login, 'service')
     // console.log(startBusiness, 'categoryList')
 
 
@@ -94,12 +95,25 @@ const Header = ({ setModalActive, setActiveData }) => {
 
                         <span className='cursor_p mr_20'>Call Back</span>
                         <span className='mr_20'>|</span>
+                        {
+                            login ?
+
+                                <Link to='/Profile' style={{ color: "white", textDecoration: "none" }}>
+                                    <span className='cursor_p mr_20'>Profile</span>
+
+                                </Link>
+                                :
+                                <>
 
 
-                        <Link onClick={() => { setActiveData('login'); setModalActive(true) }} className='text-black' > <span className='cursor_p mr_20'><button type="button" class="btn btn-warning btn-sm" style={{ width: '82px' }}>Log-in</button></span></Link>
+                                    <Link onClick={() => { setActiveData('login'); setModalActive(true) }} className='text-black' > <span className='cursor_p mr_20'><button type="button" class="btn btn-warning btn-sm" style={{ width: '82px' }}>Log-in</button></span></Link>
 
 
-                        <Link onClick={() => { setActiveData('create'); setModalActive(true) }} className='text-black' > <span className='cursor_p mr_20'><button type="button" class="btn btn-warning btn-sm" style={{ width: '82px' }}>Sign-Up</button></span></Link>
+                                    <Link onClick={() => { setActiveData('create'); setModalActive(true) }} className='text-black' > <span className='cursor_p mr_20'><button type="button" class="btn btn-warning btn-sm" style={{ width: '82px' }}>Sign-Up</button></span></Link>
+
+                                </>
+
+                        }
 
 
                     </div>
