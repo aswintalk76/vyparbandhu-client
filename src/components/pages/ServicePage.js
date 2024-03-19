@@ -36,6 +36,8 @@ import { useLocation } from "react-router-dom"
 import DocumentData from "./servicePage/DocumentData"
 import MultiImage from "./servicePage/MultiImage"
 import TestiMonials from "./TestiMonials"
+import { toast } from "react-toastify"
+import uploadFile from "../upload/uploadFile"
 
 
 
@@ -43,6 +45,19 @@ import TestiMonials from "./TestiMonials"
 const ServicePage = () => {
     const [activeSection1, setActiveSection1] = useState('Apply for Dsc'); // State to track active section
     const [activeSection2, setActiveSection2] = useState('Incorporation Certificate')
+    const [modalActive, setModalActive] = useState(false);
+    const [modalActiveUpload, setModalActiveUpload] = useState(false);
+    const [sidebar, setSidebar] = useState(false);
+    const [userData, setUserData] = useState();
+    const [requiredData, setRequiredData] = useState([{ name: 'test' }, { name: 'test2' }, { name: 'test3' }, { name: 'test4' }]);
+    const [allDoument, setAllDocumnet] = useState(0);
+    const [file, setFile] = useState()
+    const [disble, setDisble] = useState(false)
+    const [selectDocument, setSelectDocument] = useState()
+    const [documentList, setDocumentList] = useState();
+
+
+
     const handleSectionClick1 = (section) => {
         setActiveSection1(section);
     };
@@ -85,7 +100,7 @@ const ServicePage = () => {
             const data = await response.json();
             if (response.status === 200) {
                 setSelectServiceData(data)
-
+                setRequiredData(data?.stepFiveData[0]?.documentsData)
             }
 
 
@@ -100,15 +115,116 @@ const ServicePage = () => {
         getById(stateId)
     }, [stateId])
 
-    console.log(selectServicedata)
+    const openModal = () => {
+        setModalActive(true);
+    };
+
+    const closeModal = () => {
+        setModalActive(false);
+    };
+    const openUploadModal = () => {
+        setModalActiveUpload(true)
+    };
+
+    const closeUploadModal = () => {
+        setModalActiveUpload(false);
+    };
+
+    const getList = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_PORT}/admin/documentlist/list`);
+            const data = await response.json();
+            if (response.status === 200) {
+                setDocumentList(data)
+            }
+            // console.log('Data received:', data);
+
+        } catch (e) {
+            console.log(e, 'error')
+        }
+
+    }
+
+    const PayNow = () => {
+        if (localStorage.getItem('email')) {
+
+            setSidebar(true)
+
+        } else {
+            openModal()
+        }
+    }
+
+    const getData = async (id) => {
+        let url = `http://localhost:5000/admin/getuser`
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: id })
+            });
+            const data = await response.json();
+            if (response.status === 200) {
+                setUserData(data?.user?.documents)
+
+            } else {
+            }
+        } catch (e) {
+            toast.error(e)
+        }
+    }
+
+    useEffect(() => {
+        getData(localStorage.getItem('id'))
+        getList()
+    }, [])
+
+    const callBack = () => {
+        setDisble(false)
+    }
+
+    const AddDocument = async () => {
+        let url = `http://localhost:5000/admin/addDocuments`
+
+        if (file && selectDocument !== "0") {
+            setDisble(true)
+            const fileName = file.name + Date.now();
+            await uploadFile(fileName, file, callBack)
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ image: fileName, name: selectDocument, id: localStorage.getItem('id') })
+                });
+                const data = await response.json();
+                if (response.status === 200) {
+                    setUserData(data?.user?.documents)
+                    toast.success("Save Data Sucesfully!")
+                    closeUploadModal()
+
+                } else {
+                    toast.error(data.error)
+                }
+            } catch (e) {
+                toast.error(e)
+
+                console.log(e, 'error')
+            }
+
+        }
+    }
+
+
+    var allDocumentStatus;
     return (
         <>
-            <Header />
+            <Header closeModal={closeModal} modalActive={modalActive} setModalActive={setModalActive} />
             {
                 selectServicedata &&
 
                 <div>
-                    <div className='container-fluid' style={{ background: `url(${process.env.REACT_APP_PORT}/admin/service/file/${selectServicedata && selectServicedata.images})`, backgroundSize: "cover" }}>
+                    <div className='container-fluid' style={{ background: `url(${process.env.REACT_APP_BUCKET_URL}/${selectServicedata && selectServicedata.images})`, backgroundSize: "cover" }}>
                         <div className='container'>
                             <div className='row py-5'>
                                 <div className='col-sm-12 mt-2 d-flex ' style={{ flexDirection: "column", justifyContent: 'center', alignItems: "center" }}>
@@ -149,16 +265,16 @@ const ServicePage = () => {
 
                                         <div className='row mt-3'>
                                             {
-                                                data?.image && data?.questions?.length > 1 ?
+                                                data?.image ?
                                                     <>
                                                         <h1 className='text-center heading_main  mt-4'>{data.heading}</h1>
 
 
                                                         <div className='col-sm-5  pt-4 text-center'>
-                                                            <img src={`${process.env.REACT_APP_PORT}/admin/service/file/${data.image}`} alt="condition" height="auto" width='100%' />
+                                                            <img src={`${process.env.REACT_APP_BUCKET_URL}/${data.image}`} alt="condition" height="auto" width='100%' />
                                                         </div>
                                                         {
-                                                            data?.questions?.length > 1 && data.questions[0].question &&
+                                                            data?.questions?.length > 0 &&
                                                             <div className='col-sm-7 pt-5'>
                                                                 {
 
@@ -166,7 +282,10 @@ const ServicePage = () => {
                                                                         return (
                                                                             <>
                                                                                 <h3 style={{ color: 'rgb(254, 180, 68)' }}>{index + 1}. <span>{question.question}</span></h3>
-                                                                                <p>{question.description}</p>
+                                                                                {/* <p>{question.description}</p> */}
+                                                                                <pre style={{ width: '100%', whiteSpace: 'pre-wrap', textAlign: 'justify', fontFamily: 'inherit' }}>
+                                                                                    {question.description}
+                                                                                </pre>
 
                                                                             </>
                                                                         )
@@ -180,7 +299,7 @@ const ServicePage = () => {
 
                                                     <>
                                                         {
-                                                            data.questions[0].question &&
+                                                            data?.questions[0]?.question &&
                                                             <>
                                                                 <h1 className='text-center heading_main  mt-4'>{data.heading}</h1>
 
@@ -218,13 +337,12 @@ const ServicePage = () => {
                         }
                         {
                             selectServicedata?.requirements?.map((data, index) => {
-                                console.log(data, 'data')
                                 return (
                                     <>
                                         <div className="row">
                                             <h1 className="text-center heading_main  mt-4">{data?.heading}</h1>
                                             {
-                                                data?.details[0].name &&
+                                                data?.details[0]?.name &&
 
                                                 <div className="row mt-2" >
                                                     <div className=" px-5 py-2 mx-auto" style={{ width: 'auto' }}>
@@ -233,13 +351,13 @@ const ServicePage = () => {
                                                                 const className = index % 2 === 0 ? 'bg_color' : 'bg_orange';
                                                                 return (
                                                                     <>
-                                                                    {
-                                                                        SubData.name&&
+                                                                        {
+                                                                            SubData.name &&
 
-                                                                        <div key={index} className={`card py-3 px-5 ${className} mb-3`}>
-                                                                            <label className='text_workflow'><span className={`ps-3 ${className} `}>{SubData.name}</span></label>
-                                                                        </div>
-                                                                    }
+                                                                            <div key={index} className={`card py-3 px-5 ${className} mb-3`}>
+                                                                                <label className='text_workflow'><span className={`ps-3 ${className} `}>{SubData.name}</span></label>
+                                                                            </div>
+                                                                        }
 
                                                                     </>
                                                                 )
@@ -341,7 +459,6 @@ const ServicePage = () => {
 
                     {
                         selectServicedata?.incorporation?.map((data, index) => {
-                            console.log(data, 'data')
                             return (
                                 <>
                                     <div className="container">
@@ -481,7 +598,6 @@ const ServicePage = () => {
                             </div>
                         </div>
                     } */}
-                    {console.log(selectServicedata?.stepSixData?.length > 0 && 'yes', "six")}
                     {
                         selectServicedata?.stepSixData?.length > 0 && selectServicedata?.stepSixData[0].package &&
                         <>
@@ -498,7 +614,7 @@ const ServicePage = () => {
                                                     {
                                                         data?.package && data?.amount ?
 
-                                                            <div className="col-lg-4 col-sm-6 p-4">
+                                                            <div className="col-lg-4 col-sm-6 p-4" style={{ display: "flex", alignItems: 'stretch' }}>
 
                                                                 <div class="card " style={{ borderRadius: "15px" }} >
                                                                     <div className="card-body text-center bg_orange text-white text_workflow" style={{ borderTopRightRadius: "15px", borderTopLeftRadius: "15px" }}>
@@ -520,7 +636,7 @@ const ServicePage = () => {
                                                                         </ul>
                                                                         <div className="text-center">
 
-                                                                            <button className="btn px-5 text-white  " style={{ background: "#198754" }} ><b>Pay Now</b></button>
+                                                                            <button className="btn px-5 text-white  " style={{ background: "#198754" }} onClick={() => { PayNow() }}><b>Pay Now</b></button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -539,6 +655,9 @@ const ServicePage = () => {
                     }
                 </div>
             }
+
+
+
 
 
 
@@ -926,6 +1045,144 @@ const ServicePage = () => {
             <TestiMonials />
             <ContactUs />
             <Footer />
+
+            {
+                sidebar &&
+                <div class="offcanvas offcanvas-end w-25 show" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false" style={{ boxShadow: "0 0.5rem 3rem 0 rgba(0, 0, 0, 0.1)", background: "#1d1919", color: "white" }}>
+                    <div class="offcanvas-header">
+                        <h4 class="offcanvas-title d-none d-sm-block" id="offcanvas">Document List</h4>
+                        <button type="button" class=" " data-bs-dismiss="offcanvas" aria-label="Close" style={{ color: "white", border: "none", background: "transparent" }} onClick={() => { setSidebar(false) }}> <i class="bi bi-x-lg"></i></button>
+                    </div>
+                    <div class="offcanvas-body px-0">
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start" id="menu">
+
+                            {
+                                requiredData?.map((item) => {
+                                     allDocumentStatus = requiredData.every(item => {
+                                        const dataStatus = userData.filter(data => data.name === item.document);
+                                        return dataStatus.length > 0;
+                                    });
+                                    const dataStatus = userData.filter((data) => data.name === item.document)
+
+
+                                    return (
+                                        <>
+
+                                            <li class="nav-item">
+                                                <a href="#" class="nav-link text-truncate" style={{ fontSize: "20px" }}>
+                                                    {
+                                                        dataStatus.length > 0 ?
+                                                            <i class="bi bi-check2-circle" style={{ color: "#00e300" }}></i>
+                                                            :
+
+                                                            <i class="bi bi-exclamation-circle" style={{ color: "rgb(255 0 0)" }}></i>
+                                                    }
+
+
+                                                    <span class="ms-1 d-none d-sm-inline" >{item.document}</span>
+                                                </a>
+                                            </li>
+                                        </>
+                                    )
+                                })
+                            }
+
+                        </ul>
+                        <div style={{ padding: '1rem 1rem' }}>
+                        {console.log(allDocumentStatus)}
+                            {
+                                allDocumentStatus ?
+                                    <button type="button" class="btn btn-primary">Pay Now</button>
+                                    :
+                                    <button type="button" class="btn btn-primary" onClick={() => { openUploadModal() }}>Upload Document</button>
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+            {modalActiveUpload && (
+                <>
+                    <div className="modal-overlay" onClick={closeUploadModal}></div>
+                    <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+
+                        <section className="vh-100 container_body">
+                            <div className="container py-5 h-100">
+                                <div className="row px-3 d-flex align-items-center justify-content-center h-100">
+                                    <div className="col-md-10 w-auto col-lg-10 col-xl-9 card flex-row mx-auto px-0">
+                                        {/* <div className="img-left d-none d-md-flex">
+                                            <div>
+
+                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                                                    alt="login form" class="img-fluid" style={{ height: "100%" }} />
+                                            </div>
+                                        </div> */}
+
+                                        <div className="card-body">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style={{ fontSize: "30px" }} onClick={closeUploadModal}>
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+
+
+                                            <h2 class="title text-center mt-4 modal_heading" >
+                                                Add  Document
+                                            </h2>
+                                            <div class="form-box px-3">
+
+                                                <div class="form-input">
+                                                    <select class="form-select" aria-label="Default select example" style={{ borderRadius: "30px" }} onChange={(e) => { setSelectDocument(e.target.value) }}>
+                                                        <option value='0'>Choose Document</option>
+
+                                                        {
+                                                            documentList?.map((item) => {
+                                                                return (
+                                                                    <>
+
+                                                                        <option value={item.name}>{item.name}</option>
+
+                                                                    </>
+                                                                )
+                                                            })
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 mt-3">
+                                                    <input class="form-control" type="file" id="formFile" style={{ borderRadius: "30px" }} onChange={(e) => { setFile(e.target.files[0]) }} />
+                                                </div>
+
+                                                <div class="mb-3">
+
+                                                    <button type="submit" class="btn btn-block text-uppercase modal_button_bg" onClick={() => { AddDocument() }} disabled={disble}>
+                                                        {disble ?
+                                                            <div class="spinner-border text-warning" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                            :
+
+                                                            <span>Submit</span>
+                                                        }
+
+                                                    </button>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                </>
+            )}
+
+
+
         </>
     )
 }

@@ -8,6 +8,8 @@ import Login from './components/pages/Login';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Profile from './components/pages/Profile';
+import Blog from './components/pages/Blog';
+import BlogDetails from './components/pages/BlogDetails';
 
 
 // import AnnualFiling from './components/pages/AnnualFiling';
@@ -29,6 +31,8 @@ function App() {
             <Route path="/documents" element={<DocumentPage />} />
             <Route path="/servicePage" element={<ServicePage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blogdetails" element={<BlogDetails />} />
 
           </Routes>
             <ToastContainer />

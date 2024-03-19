@@ -7,7 +7,8 @@ const deleteFile = async (key, callBack) => {
 
     try {
         let s3bucket = new AWS.S3({
-           
+            accessKeyId: 'AKIA2UC3FUJ5T5BNCSZM',
+            secretAccessKey: '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',
             Bucket: BUCKET_NAME,
         });
         var params = { Bucket: BUCKET_NAME, Key: decodeURIComponent(key) }; // Decoding URI component

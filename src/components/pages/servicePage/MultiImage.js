@@ -10,7 +10,18 @@ const MultiImage = ({ data }) => {
             {
                 data?.description &&
 
-                <h4 className=' mt-3 text-center mb-' > {data?.description}</h4>
+                <h4 className=' mt-3 text-center mb-3' >
+                    <div style={{ fontSize: '20px' }}>
+                        <pre style={{ width: '100%', whiteSpace: 'pre-wrap', textAlign: 'justify', fontFamily: 'inherit' }}>
+                            {data.description}
+                        </pre>
+                    </div>
+                    {/* <pre style={{ width: '100%', whiteSpace: 'pre-wrap', textAlign: 'justify', fontFamily: 'inherit' }}>
+                        {data?.description}
+                    </pre> */}
+
+
+                </h4>
             }
             {
                 data?.images.length !== 0 &&

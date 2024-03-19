@@ -1,6 +1,5 @@
 import PU from "../../images/PU-separator.svg"
 const Section2 = ({ data }) => {
-    console.log(data, 'section2')
 
     return (
         <>
@@ -23,7 +22,7 @@ const Section2 = ({ data }) => {
 
                             <div className='col-lg-4' style={{display:'flex' , justifyContent:"center" , alignItems:'center'}}>
 
-                                <img src={`${process.env.REACT_APP_PORT}/admin/service/file/${data.icon}`} alt="flower" style={{ width: "90%" }} />
+                                <img src={`${process.env.REACT_APP_BUCKET_URL}/${data.icon}`} alt="flower" style={{ width: "90%" }} />
                             </div>
                         </>
                         :
