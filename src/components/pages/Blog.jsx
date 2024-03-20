@@ -8,10 +8,7 @@ import { Link } from 'react-router-dom'
 
 
 const Blog = () => {
-    const [blogdata, setBlogData] = useState([
-        { img: blog, heading: 'All photographs are accurate', details: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal" },
-        { img: blog, heading: 'All photographs are accurate', details: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal" },
-    ])
+    const [blogdata, setBlogData] = useState()
     const [popularBlog, setPopularBlog] = useState([
         { img: popular, heading: "Apple Introduces Search Ads Basic", date: "jun 22, 2018" },
         { img: popular, heading: "new rules, more cars, more races", date: "jun 8, 2018" },
@@ -38,7 +35,7 @@ const Blog = () => {
 
     }, [])
 
-    
+
     function getVideoId(url) {
         // Regular expression to match YouTube URL patterns
         const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -63,7 +60,7 @@ const Blog = () => {
                     <div class="row clearfix">
                         <div class="col-lg-8 col-md-12 left-box">
                             {
-                                blogdata?.map((item) => {
+                                blogdata?.length ? blogdata?.map((item) => {
                                     return (
                                         <>
                                             <div class="card single_post">
@@ -103,6 +100,18 @@ const Blog = () => {
                                         </>
                                     )
                                 })
+                                    :
+                                    <>
+                                        <div class="card single_post">
+                                            <div class="body text-center">
+                                               
+                                                <h3 className='text-center'>No Blogs</h3>
+                                               
+                                            </div>
+                                           
+                                        </div>
+
+                                    </>
 
                             }
 
@@ -129,7 +138,7 @@ const Blog = () => {
                             </div>
                             <div class="card">
                                 <div class="header">
-                                    <h2>Categories Clouds</h2>
+                                    <h2>Categories</h2>
                                 </div>
                                 <div class="body widget">
                                     <ul class="list-unstyled categories-clouds  list_data m-b-0">
