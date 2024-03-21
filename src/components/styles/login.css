@@ -33,7 +33,7 @@
     background-color: rgb(25, 135, 84) !important
 }
 
-.card {
+.login .card {
     overflow: hidden;
     border: 0 !important;
     border-radius: 20px !important;
@@ -84,8 +84,11 @@
 }
 
 .form-input input:focus,
-.form-input input:valid {
-    border: 2px solid #007bff;
+/* .form-input input:valid, */
+.form-input textarea:focus
+/* .form-input textarea:valid */
+ {
+    border: 2px solid #007bff !important;
 }
 
 .form-input input:focus::placeholder {
@@ -132,7 +135,7 @@
     border: 0;
     font-weight: bold;
 }
-
+/* 
 .form-box .btn-facebook {
     background: #4866a8;
 }
@@ -155,4 +158,4 @@
 
 .form-box .btn-twitter:hover {
     background: #2eb7e5;
-}
+} */

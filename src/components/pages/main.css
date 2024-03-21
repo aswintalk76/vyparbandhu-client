@@ -46,7 +46,7 @@
 }
 
 .bg_color {
-    background-color: #198754;
+    background-color: #198754  !important;
 }
 
 .text_workflow {

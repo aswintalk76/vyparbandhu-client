@@ -227,7 +227,7 @@ const Header = ({ closeModal , modalActive ,setModalActive}) => {
             <div>
                 <div style={{ background: "#198754" }}>
                     <div className="container text-white">
-                        <div className='textSize py-2 d-md-flex  justify-content-center'>
+                        <div className='textSize py-2 d-md-flex  justify-content-center' style={{alignItems:"center"}}>
 
                             <span className='cursor_p mr_20 '> <Link to="/documents" style={{ color: "white", textDecoration: "none" }}>Document Formats</Link> </span>
 
@@ -241,7 +241,7 @@ const Header = ({ closeModal , modalActive ,setModalActive}) => {
 
                             <span className='mr_20'>|</span>
 
-                            <span style={{ display: "flex", alignItems: "center" }} className='cursor_p mr_20'><FaWhatsapp /><IoCallOutline />+91-8077425868</span>
+                            <span style={{ display: "flex", alignItems: "center" }} className='cursor_p mr_20'><IoCallOutline /><FaWhatsapp /><span style={{display:'flex' , flexDirection:"column"}}><span>+91-8077425868</span><span>+91-9716970019</span></span></span>
 
                             <span className='mr_20'>|</span>
 
@@ -639,7 +639,7 @@ const Header = ({ closeModal , modalActive ,setModalActive}) => {
 
                         <section className="vh-100 container_body">
                             <div className="container py-5 h-100">
-                                <div className="row px-3 d-flex align-items-center justify-content-center h-100">
+                                <div className="row px-3 d-flex align-items-center justify-content-center h-100 login">
                                     <div className="col-md-10 col-lg-10 col-xl-9 card flex-row mx-auto px-0">
                                         <div className="img-left d-none d-md-flex"></div>
 

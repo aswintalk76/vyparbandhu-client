@@ -21,14 +21,15 @@ const Footer = () => {
                     <div className="row text-light ">
                         <div className="col-lg-3 col-sm-6 pt-4 text-lg-start text-center">
                             <p><a href='#' className='icon_hover'>About</a></p>
-                            <p><a href='#' className='icon_hover'>Carrers</a></p>
+                            {/* <p><a href='#' className='icon_hover'>Carrers</a></p> */}
                             <p><a href='#' className='icon_hover'>Out Team</a></p>
                             <p><a href='#' className='icon_hover'>Contact Us</a></p>
                         </div>
                         <div className="col-lg-3 col-sm-6 pt-4 text-lg-start text-center">
                             <p><a href='#' className='icon_hover'>Knowledge Hub</a></p>
-                            <p><a href='#' className='icon_hover'>Live Chat</a></p>
-                            <p><a href='#' className='icon_hover'>Video</a></p>
+                            <p><a href='/blog' className='icon_hover'>Blogs</a></p>
+                            {/* <p><a href='#' className='icon_hover'>Live Chat</a></p> */}
+                            {/* <p><a href='#' className='icon_hover'>Video</a></p> */}
                             <p><a href='#' className='icon_hover'>Get Franchises</a></p>
 
                         </div>
