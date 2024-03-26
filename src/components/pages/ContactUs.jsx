@@ -16,7 +16,7 @@ const ContactUs = () => {
 
     const SubmitData = async () => {
         if (firstname && lastname && email && number &&   doubt) {
-            let url = `http://localhost:5000/admin/ConatctUsExpertCall`
+            let url = `${process.env.REACT_APP_PORT}/admin/ConatctUsExpertCall`
             try {
                 const response = await fetch(url, {
                     method: "POST",

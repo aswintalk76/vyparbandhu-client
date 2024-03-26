@@ -42,7 +42,7 @@ const Header = ({ closeModal , modalActive ,setModalActive}) => {
     const CreateAccount = async () => {
         if (createName && createEmail && createPassword && createConPassword) {
             if (createConPassword === createPassword) {
-                let url = `http://localhost:5000/admin/createAccount`
+                let url = `${process.env.REACT_APP_PORT}/admin/createAccount`
                 try {
                     const response = await fetch(url, {
                         method: "POST",
@@ -84,7 +84,7 @@ const Header = ({ closeModal , modalActive ,setModalActive}) => {
     const Login = async () => {
         if (email && password) {
 
-            let url = `http://localhost:5000/admin/login`
+            let url = `${process.env.REACT_APP_PORT}/admin/login`
             try {
                 const response = await fetch(url, {
                     method: "POST",
@@ -130,7 +130,7 @@ const Header = ({ closeModal , modalActive ,setModalActive}) => {
     const ForgotPassword = async () => {
         if (email && createPassword && createConPassword) {
             if (createConPassword === createPassword) {
-                let url = `http://localhost:5000/admin/ForgotPassword`
+                let url = `${process.env.REACT_APP_PORT}/admin/ForgotPassword`
                 try {
                     const response = await fetch(url, {
                         method: "POST",

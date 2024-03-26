@@ -39,7 +39,7 @@ const Profile = () => {
     }
 
     const getData = async (id) => {
-        let url = `http://localhost:5000/admin/getuser`
+        let url = `${process.env.REACT_APP_PORT}/admin/getuser`
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -88,7 +88,7 @@ const Profile = () => {
     }, [])
 
     const Submit = async () => {
-        let url = `http://localhost:5000/admin/editAccount`
+        let url = `${process.env.REACT_APP_PORT}/admin/editAccount`
 
 
         try {
@@ -138,7 +138,7 @@ const Profile = () => {
     }
 
     const AddDocument = async () => {
-        let url = `http://localhost:5000/admin/addDocuments`
+        let url = `${process.env.REACT_APP_PORT}/admin/addDocuments`
 
         if (file && selectDocument !== "0") {
             setDisble(true)
@@ -173,7 +173,7 @@ const Profile = () => {
 
 
     const DeleteDocument = async (item) => {
-        let url = `http://localhost:5000/admin/deleteDocument`
+        let url = `${process.env.REACT_APP_PORT}/admin/deleteDocument`
         console.log(item)
         setDisble(true)
         await deleteFile(item.image, callBack);

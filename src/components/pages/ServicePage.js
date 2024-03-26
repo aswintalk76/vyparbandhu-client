@@ -156,7 +156,7 @@ const ServicePage = () => {
     }
 
     const getData = async (id) => {
-        let url = `http://localhost:5000/admin/getuser`
+        let url = `${process.env.REACT_APP_PORT}/admin/getuser`
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -184,7 +184,7 @@ const ServicePage = () => {
     }
 
     const AddDocument = async () => {
-        let url = `http://localhost:5000/admin/addDocuments`
+        let url = `${process.env.REACT_APP_PORT}/admin/addDocuments`
 
         if (file && selectDocument !== "0") {
             setDisble(true)
